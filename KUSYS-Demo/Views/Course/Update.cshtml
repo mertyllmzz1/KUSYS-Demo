@@ -1,0 +1,38 @@
+﻿@model DataAccessLayer.Models.Courses
+
+<style>
+    .elementDistance {
+        padding-bottom: 2%;
+    }
+</style>
+<div class="container">
+    <h3>
+        Kurs Güncelle
+    </h3>
+    <form action="/Course/Update/@Model.Id" method="post">
+
+        <div class="row elementDistance" style="padding-top:2%;">
+            <label class="col-md-2">Öğrenci No</label>
+            <div class="col-md-4 ">
+
+                <input name="CourseId" class="form-control col-md-2" value="@Model.CourseId" placeholder="Öğrenci No Giriniz" type="text" />
+
+            </div>
+        </div>
+        <div class="row elementDistance">
+            <label class="col-md-2">Adı</label>
+            <div class="col-md-4">
+
+                <input name="CourseName" class="form-control col-md-4" value="@Model.CourseName" placeholder="İsim Giriniz" type="text" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary pull-right "> Kaydet</button>
+        </div>
+    </form>
+</div>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" style="margin-top:25px;">@ViewBag.Message</div>
+} 

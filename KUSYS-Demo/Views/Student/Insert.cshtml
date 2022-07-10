@@ -1,0 +1,50 @@
+﻿@model DataAccessLayer.Models.Students
+
+<style>
+    .elementDistance {
+        padding-bottom: 2%;
+    }
+</style>
+<div class="container">
+    <h3>
+        Öğrenci Tanımlama Ekranı
+    </h3>
+    <form action="/Student/Insert" method="post">
+        <div class="row elementDistance" style="padding-top:2%;">
+            <label class="col-md-2">Öğrenci No</label>
+            <div class="col-md-4 ">
+
+                <input asp-for="StudentId" class="form-control col-md-2" placeholder="Öğrenci No Giriniz" type="text" />
+            </div>
+        </div>
+        <div class="row elementDistance">
+            <label class="col-md-2">Adı</label>
+            <div class="col-md-4">
+
+                <input asp-for="FirstName" class="form-control" placeholder="İsim Giriniz" type="text" />
+            </div>
+        </div>
+        <div class=" row elementDistance">
+            <label class="col-md-2">Soyadı</label>
+            <div class="col-md-4">
+                <input asp-for="LastName" class="form-control" placeholder="Soyisim Giriniz" type="text" />
+            </div>
+        </div>
+        <div class=" row elementDistance">
+            <label class="col-md-2">Doğum Tarihi</label>
+            <div class="col-md-4">
+                <input asp-for="BirthDate" class="form-control col-md-2" placeholder="Doğum Tarihi Giriniz" type="date" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary pull-right "> Kaydet</button>
+        </div>
+    </form>
+
+
+</div>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" style="margin-top:25px;">@ViewBag.Message</div>
+} 

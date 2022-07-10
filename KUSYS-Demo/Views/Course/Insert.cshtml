@@ -1,0 +1,39 @@
+﻿@model DataAccessLayer.Models.Courses
+
+<style>
+    .elementDistance {
+        padding-bottom: 2%;
+    }
+</style>
+<div class="container">
+    <h3>
+        Kurs Oluştur
+    </h3>
+    <form action="/Course/Insert" method="post">
+        <div class="row elementDistance" style="padding-top:2%;">
+            <label class="col-md-2">Kurs No</label>
+            <div class="col-md-4 ">
+
+                <input asp-for="CourseId" class="form-control col-md-2" placeholder="Kurs No Giriniz" type="text" />
+            </div>
+        </div>
+        <div class="row elementDistance">
+            <label class="col-md-2">Kurs Adı</label>
+            <div class="col-md-4">
+
+                <input asp-for="CourseName" class="form-control" placeholder="Kurs Adı Giriniz" type="text" />
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary pull-right "> Kaydet</button>
+        </div>
+    </form>
+
+
+</div>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" style="margin-top:25px;">@ViewBag.Message</div>
+} 

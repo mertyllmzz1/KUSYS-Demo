@@ -1,0 +1,33 @@
+﻿<h3>
+    Öğrenciler Ve Kurslar
+</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>#</td>
+            <td>Öğrenci No</td>
+            <td>Adı</td>
+            <td>Soyadı</td>
+            <td>Kurs Kodu</td>
+            <td>Kurs Adı</td>
+            <td>İşlemler</td>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr ondblclick="ShowStudentDetailsModal()">
+                <td>@item.Id </td>
+                <td>@item.Students.StudentId</td>
+                <td>@item.Students.FirstName</td>
+                <td>@item.Students.LastName</td>
+                <td>@item.Courses.CourseId</td>
+                <td>@item.Courses.CourseName</td>
+                <td>
+                    <a class="btn btn-danger" href="/CoursesAndStudentsMatches/Delete/@item.Id">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,183 @@
+﻿<h3>
+    Öğrenciler 
+</h3>
+<a href="/Student/Insert" style="margin-top:25px;margin-bottom:25px;" class="btn btn-primary">Yeni Öğrenci</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>#</td>
+            <td>Öğrenci No</td>
+            <td>Adı</td>
+            <td>Soyadı</td>
+            <td>Doğum Tarihi</td>
+            <td>İşlemler</td>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr ondblclick="ShowStudentDetailsModal()">
+                <td>@item.Id</td>
+                <td>@item.StudentId</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.BirthDate.ToString("dd.MM.yyyy")</td>
+                <td>
+                    <a class="btn btn-warning" href="/Student/Update/@item.Id">Güncelle</a>
+                    <a class="btn btn-danger" href="/Student/Delete/@item.Id">Sil</a>
+                    <button onclick="ShowStudentDetailsModal(@item.Id,'@item.FirstName','@item.LastName','@item.BirthDate.ToString("yyyy-MM-dd")')" class="btn btn-info">Detay</button>
+                    <button onclick="ShowStudentCourseMatchModal(@item.Id,'@item.FirstName','@item.LastName')" class="btn btn-primary">Kurs Ata</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="modal fade" id="modalStudentDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Öğrenci Detay</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="col-sm-5 control-label">Öğrenci Adı:</label>
+                    <div class="col-sm-7">
+                        <label id="lblAdi" class="control-label col-md-6"> </label>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label">Öğrenci Soyadı:</label>
+                    <div class="col-sm-7">
+                        <label id="lblSoyadi" class="control-label col-md-6"> </label>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label">Öğrenci Doğum Tarihi:</label>
+                    <div class="col-sm-7">
+                        <label id="lblBirthDate" class="control-label col-md-6"> </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-4 control-label">Kurslar: <span id="spNthCourse"></span> :</label>
+                    <ol id="courses"></ol>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalStudentAddCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Öğrenci Detay</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="col-sm-5 control-label">Öğrenci Adı:</label>
+                    <div class="col-sm-7">
+                        <label id="lblAssignAdi" class="control-label col-md-6"> </label>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label">Öğrenci Soyadı:</label>
+                    <div class="col-sm-7">
+                        <label id="lblAssignSoyadi" class="control-label col-md-6"> </label>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label">Kurs Seç</label>
+                    <div>
+                        <select id="slCourse"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" onclick="SaveCourseForStudent()" class="btn btn-success">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function ShowStudentDetailsModal(id, Name, LastName, BirthDate) {
+        $("#modalStudentDetail").modal('show');
+        $("#courses").empty();
+        $.ajax({
+            type: "POST",
+            url: "/Student/GetStudentDetailById",
+            data: { id: '' + id + '' },
+            dataType: "json",
+            success: function(response) {
+                $("#lblAdi").text(Name);
+                $("#lblSoyadi").text(LastName);
+                $("#lblBirthDate").text(BirthDate);
+
+                let list = document.getElementById("courses");
+                $.each(response, function(index, value) {
+                    let li = document.createElement("li");
+                    li.innerText = value.courses.courseName
+                    list.appendChild(li);
+                })
+            }
+        })
+    }
+    var studentId;
+    function ShowStudentCourseMatchModal(id, Name, LastName) {
+        $("#modalStudentAddCourse").modal('show');
+        studentId = id
+        //$("#slCourse").select2({
+        //    placeholder:"Seçiniz"
+        //})
+        $('#slCourse').empty();
+        $.ajax({
+            type: "POST",
+            url: "/Course/GetUnassignedCourseForStudent",
+            data: { id: '' + id + '' },
+            dataType: "json",
+            success: function(response) {
+                $("#lblAssignAdi").text(Name);
+                $("#lblAssignSoyadi").text(LastName);;
+
+                let list = document.getElementById("courses");
+                $.each(response, function(index, value) {
+                    var option = new Option(value.courseName, value.id, false, false);
+                    $('#slCourse').append(option).trigger('change')
+                })
+            }
+        })
+    }
+    function SaveCourseForStudent() {
+
+        let courseMatch = {
+            CoursesId:parseInt($("#slCourse").val()),
+            StudentsId: studentId
+        };
+        $.ajax({
+            type: "POST",
+            url: "/CoursesAndStudentsMatches/Insert",
+            //data: { id: '' + id + '' },
+            data: JSON.stringify(courseMatch),
+            dataType: "json",
+            contentType:"application/json; chartset:utf-8",
+            success: function(response) {
+                location.reload();
+            }
+        })
+
+    }
+</script>
